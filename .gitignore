@@ -1,0 +1,9 @@
+/target
+Cargo.lock
+*.gguf
+*.json
+*.bin
+*.safetensors
+.DS_Store
+.idea/
+.vscode/

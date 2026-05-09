@@ -1,0 +1,42 @@
+[workspace]
+members = ["hy-mt-core", "hy-mt-cli"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/n0madic/Hy-MT1.5-rs"
+rust-version = "1.82"
+
+[workspace.dependencies]
+candle-core = "0.10"
+candle-nn = "0.10"
+tokenizers = { version = "0.21", default-features = false, features = ["onig"] }
+half = { version = "2", features = ["bytemuck"] }
+memmap2 = "0.9"
+byteorder = "1.5"
+bytemuck = { version = "1", features = ["derive"] }
+rayon = "1.10"
+thiserror = "2"
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+rand = "0.8"
+hf-hub = "0.4"
+safetensors = "0.4"
+serde_json = "1"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+debug = "line-tables-only"
+strip = "debuginfo"
+
+# NOTE: `panic = "abort"` is intentionally NOT set here. Cargo only honours
+# `panic` at workspace-root profile level, and applying it would force every
+# downstream consumer of `hy-mt-core` (a public library) to abort on any
+# panic — including ones from Candle that they may want to recover from.
+# `hy-mt-cli` accepts the standard unwind cost in exchange for library
+# friendliness.
